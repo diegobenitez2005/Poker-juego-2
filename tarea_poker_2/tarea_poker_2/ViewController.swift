@@ -31,8 +31,10 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var labelJugador1: UILabel!
     
+    @IBOutlet weak var puntajeJugador1: UILabel!
     @IBOutlet weak var jugador2label: UILabel!
     
+    @IBOutlet weak var puntajeJugador2: UILabel!
     @IBOutlet weak var jugarButton: UIButton!
     
     @IBOutlet weak var labelBienvenidos: UILabel!
@@ -72,21 +74,62 @@ class ViewController: UIViewController {
             jugarButton.setTitle("Repartir", for: .normal)
             
         }
-            
             // Alternar estado
-//        estadoTextoBoton.toggle()
+        //estadoTextoBoton.toggle()
         jugador1TextField.isHidden = estadoTextoBoton
         jugador2TextField.isHidden = estadoTextoBoton
         labelJugador1.isHidden = estadoTextoBoton
         jugador2label.isHidden = estadoTextoBoton
         labelBienvenidos.isHidden = estadoTextoBoton
-        
+        puntajeJugador1.text = String(puntosJugador1)
+        puntajeJugador2.text = String(puntosJugador2)
+        stackJugador1.isHidden = false
+        stackJugador2.isHidden = false
         
         // create the alert
         
         
 
     }
+    @IBAction func resetButton(_ sender: UIButton) {
+        // Mostrar los campos de texto y etiquetas de los jugadores
+        jugador1TextField.isHidden = false
+        jugador2TextField.isHidden = false
+        labelJugador1.isHidden = false
+        jugador2label.isHidden = false
+        labelBienvenidos.isHidden = false
+
+        // Ocultar los stacks de cartas
+        stackJugador1.isHidden = true
+        stackJugador2.isHidden = true
+
+        // Resetear colores
+        stackJugador1.backgroundColor = .clear
+        stackJugador2.backgroundColor = .clear
+
+        // Limpiar cartas
+//        for imageView in vistasCartasJugador1 {
+//            imageView.image = nil
+//        }
+//        for imageView in vistasCartasJugador2 {
+//            imageView.image = nil
+//        }
+
+        // Limpiar campos de texto (opcional)
+        jugador1TextField.text = ""
+        jugador2TextField.text = ""
+
+        // Resetear botón de jugar
+        jugarButton.setTitle("Repartir", for: .normal)
+        estadoTextoBoton = true
+        
+        puntajeJugador1.text = "0"
+        puntajeJugador2.text = "0"
+        puntosJugador1 = 0
+        puntosJugador2 = 0
+    }
+    
+    
 
     func mostrarCartas() {
         // Usar la función generarPartida() de tu lógica (debería estar importada)
@@ -98,25 +141,34 @@ class ViewController: UIViewController {
 
             let nombreImagenRojo = "\(cartaRojo.palo.rawValue)\(cartaRojo.valor.rawValue)"
             let nombreImagenNegro = "\(cartaNegro.palo.rawValue)\(cartaNegro.valor.rawValue)"
-
+            
             vistasCartasJugador1[i].image = UIImage(named: nombreImagenRojo)
             vistasCartasJugador2[i].image = UIImage(named: nombreImagenNegro)
         }
+        let jugador1 = jugador1TextField.text ?? "Jugador 1"
+        let jugador2 = jugador2TextField.text ?? "Jugador 2"
+        var alert = UIAlertController(title: "RESULTADO!!", message: "", preferredStyle: UIAlertController.Style.alert)
+        
         if resultadoPartida.resultado.contains("Jugador 1") {
             stackJugador1.backgroundColor = .green
             stackJugador2.backgroundColor = .red
+           alert = UIAlertController(title: "RESULTADO!!", message: "\(jugador1) gana!!", preferredStyle: UIAlertController.Style.alert)
+            puntosJugador1 += 1
+            
             
         } else if resultadoPartida.resultado.contains("Jugador 2"){
             stackJugador1.backgroundColor = .red
             stackJugador2.backgroundColor = .green
+           alert = UIAlertController(title: "RESULTADO!!", message: "\(jugador2) gana!!", preferredStyle: UIAlertController.Style.alert)
+            puntosJugador2 += 1
         } else {
             stackJugador1.backgroundColor = .gray
             stackJugador2.backgroundColor = .gray
+            alert = UIAlertController(title: "RESULTADO!!", message: "\(resultadoPartida.resultado)", preferredStyle: UIAlertController.Style.alert)
         }
         print("Texto resultado: \(resultadoPartida.resultado)")
+       
         
-        let alert = UIAlertController(title: "RESULTADO!!", message: "\(resultadoPartida.resultado)", preferredStyle: UIAlertController.Style.alert)
-
                 // add an action (button)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
 
@@ -125,3 +177,5 @@ class ViewController: UIViewController {
     }
 }
 
+var puntosJugador1: Int = 0
+var puntosJugador2: Int = 0
