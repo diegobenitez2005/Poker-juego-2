@@ -41,10 +41,19 @@ class ViewController: UIViewController {
     
     var vistasCartasJugador1: [UIImageView] = []
     var vistasCartasJugador2: [UIImageView] = []
-
+    
+    var nombreUsuario1: String?
+    var nombreUsuario2: String?
+    
+    @IBOutlet weak var nameJugador1: UILabel!
+    @IBOutlet weak var nameJugador2: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        nameJugador1.text = nombreUsuario1
+        nameJugador2.text = nombreUsuario2
+        nameJugador1.textColor = .white
+        nameJugador2.textColor = .white
         // Inicializamos los arrays aquí (ya conectados los IBOutlet)
         vistasCartasJugador1 = [
             cartaJugador1_1,
@@ -60,6 +69,7 @@ class ViewController: UIViewController {
             cartaJugador2_4,
             cartaJugador2_5
         ]
+        
 
     }
     var estadoTextoBoton: Bool = true
@@ -76,11 +86,10 @@ class ViewController: UIViewController {
         }
             // Alternar estado
         //estadoTextoBoton.toggle()
-        jugador1TextField.isHidden = estadoTextoBoton
-        jugador2TextField.isHidden = estadoTextoBoton
+        nameJugador1.isHidden = estadoTextoBoton
+        nameJugador2.isHidden = estadoTextoBoton
         labelJugador1.isHidden = estadoTextoBoton
         jugador2label.isHidden = estadoTextoBoton
-        labelBienvenidos.isHidden = estadoTextoBoton
         puntajeJugador1.text = String(puntosJugador1)
         puntajeJugador2.text = String(puntosJugador2)
         stackJugador1.isHidden = false
@@ -92,14 +101,11 @@ class ViewController: UIViewController {
 
     }
     @IBAction func resetButton(_ sender: UIButton) {
-        // Mostrar los campos de texto y etiquetas de los jugadores
-        jugador1TextField.isHidden = false
-        jugador2TextField.isHidden = false
+        nameJugador1.isHidden = false
+        nameJugador2.isHidden = false
         labelJugador1.isHidden = false
         jugador2label.isHidden = false
-        labelBienvenidos.isHidden = false
 
-        // Ocultar los stacks de cartas
         stackJugador1.isHidden = true
         stackJugador2.isHidden = true
 
@@ -115,11 +121,8 @@ class ViewController: UIViewController {
 //            imageView.image = nil
 //        }
 
-        // Limpiar campos de texto (opcional)
-        jugador1TextField.text = ""
-        jugador2TextField.text = ""
+        
 
-        // Resetear botón de jugar
         jugarButton.setTitle("Repartir", for: .normal)
         estadoTextoBoton = true
         
@@ -132,7 +135,7 @@ class ViewController: UIViewController {
     
 
     func mostrarCartas() {
-        // Usar la función generarPartida() de tu lógica (debería estar importada)
+        
         let resultadoPartida = generarPartida()
 
         for i in 0..<5 {
@@ -145,8 +148,8 @@ class ViewController: UIViewController {
             vistasCartasJugador1[i].image = UIImage(named: nombreImagenRojo)
             vistasCartasJugador2[i].image = UIImage(named: nombreImagenNegro)
         }
-        let jugador1 = jugador1TextField.text ?? "Jugador 1"
-        let jugador2 = jugador2TextField.text ?? "Jugador 2"
+        let jugador1 = nameJugador1.text ?? "Jugador 1"
+        let jugador2 = nameJugador2.text ?? "Jugador 2"
         var alert = UIAlertController(title: "RESULTADO!!", message: "", preferredStyle: UIAlertController.Style.alert)
         
         if resultadoPartida.resultado.contains("Jugador 1") {
@@ -169,12 +172,13 @@ class ViewController: UIViewController {
         print("Texto resultado: \(resultadoPartida.resultado)")
        
         
-                // add an action (button)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
 
                 // show the alert
         self.present(alert, animated: true, completion: nil)
     }
+    
+    
 }
 
 var puntosJugador1: Int = 0
