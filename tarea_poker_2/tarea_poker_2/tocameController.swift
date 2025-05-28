@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ThirdViewController: UIViewController {
+class tocameController: UIViewController {
     
     @IBOutlet weak var tocameView: UIView!
     
@@ -17,15 +17,17 @@ class ThirdViewController: UIViewController {
     
     @IBOutlet weak var targetButton: UIButton!
     @IBOutlet weak var startButton: UIButton!
+    @IBOutlet weak var tablasButton: UIButton!
     
     var nombreUsuario1: String?
-    
     var iniciarTimer: Timer?
     var tiempoInicial: Int = 30
-    
+    var puntaje: Int = 0
+    var jugando: Bool = false
     
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         targetButton.isHidden = true
         nombreLabel.text = nombreUsuario1
     }
@@ -55,7 +57,9 @@ class ThirdViewController: UIViewController {
         startTimer()
         targetButton.isHidden = false
         
-        
+    }
+    @IBAction func leaderboardTapped (_ sender: UIButton) {
+        performSegue(withIdentifier: "goToLeaderboard", sender: self)
     }
     
     func startTimer() {
@@ -71,24 +75,14 @@ class ThirdViewController: UIViewController {
             }
         }
     }
+    
     func timerFinal () {
+        let nombre = nombreUsuario1
         targetButton.isHidden = true
         tiempoInicial = 30
         jugando = false
-        
-        
+        var resultados = UserDefaults.standard.array(forKey: "resultados") as? [[String: Any]] ?? []
+        resultados.append(["nombre": nombre ?? "Jugador Desconocido", "puntaje": puntaje])
+        UserDefaults.standard.set(resultados, forKey: "resultados")
     }
-    var puntaje: Int = 0
-    var jugando: Bool = false
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
