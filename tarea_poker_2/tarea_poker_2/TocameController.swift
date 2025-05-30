@@ -7,7 +7,7 @@
 
 import UIKit
 
-class tocameController: UIViewController {
+class TocameController: UIViewController {
     
     @IBOutlet weak var tocameView: UIView!
     

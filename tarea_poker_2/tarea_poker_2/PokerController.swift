@@ -7,7 +7,7 @@
 
 import UIKit
 
-class pokerController: UIViewController {
+class PokerController: UIViewController {
     
     @IBOutlet weak var stackJugador1: UIStackView!
     @IBOutlet weak var stackJugador2: UIStackView!

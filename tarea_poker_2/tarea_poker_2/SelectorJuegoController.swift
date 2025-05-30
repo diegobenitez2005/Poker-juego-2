@@ -7,7 +7,7 @@
 
 import UIKit
 
-class loginController: UIViewController {
+class SelectorJuegoController: UIViewController {
     
     @IBOutlet weak var gamePicker: UITextField!
     
@@ -69,7 +69,7 @@ class loginController: UIViewController {
       
     
 
-extension loginController: UIPickerViewDelegate, UIPickerViewDataSource {
+extension SelectorJuegoController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -84,8 +84,6 @@ extension loginController: UIPickerViewDelegate, UIPickerViewDataSource {
         gamePicker.text = games[row]
         gamePicker.resignFirstResponder()
         //self.view.endEditing(true)
-        let usuario1 = usuario1TextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        let usuario2 = usuario2TextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
 
         if games[row] == "Tocame" {
             labelUser2.isHidden = true
@@ -104,12 +102,12 @@ extension loginController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToPokerScreen" {
-            if let destination = segue.destination as? pokerController {
+            if let destination = segue.destination as? PokerController {
                 destination.nombreUsuario1 = usuario1TextField.text
                 destination.nombreUsuario2 = usuario2TextField.text
             }
         } else if segue.identifier == "goToTocameScreen" {
-            if let destination = segue.destination as? tocameController {
+            if let destination = segue.destination as? TocameController {
                 destination.nombreUsuario1 = usuario1TextField.text
             }
         }
