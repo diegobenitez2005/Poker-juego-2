@@ -10,14 +10,12 @@ import UIKit
 class SelectorJuegoController: UIViewController {
     
     @IBOutlet weak var gamePicker: UITextField!
+    var username: String?
     
-    @IBOutlet weak var usuario1TextField: UITextField!
     
-    @IBOutlet weak var usuario2TextField: UITextField!
     
-    @IBOutlet weak var labelUser1: UILabel!
     
-    @IBOutlet weak var labelUser2: UILabel!
+    @IBOutlet weak var labelUser: UILabel!
     @IBOutlet weak var jugarBoton: UIButton!
     
     @IBOutlet weak var tocameView: UIView!
@@ -25,7 +23,6 @@ class SelectorJuegoController: UIViewController {
     let games = ["Poker","Tocame"]
     var pickerView = UIPickerView()
     
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,9 +30,8 @@ class SelectorJuegoController: UIViewController {
         pickerView.delegate = self
         pickerView.dataSource = self
         gamePicker.inputView = pickerView
-        usuario1TextField.addTarget(self, action: #selector(textFieldsChanged), for: .editingChanged)
-        usuario2TextField.addTarget(self, action: #selector(textFieldsChanged), for: .editingChanged)
         jugarBoton.isEnabled = false
+        labelUser.text = username
         
     }
     
@@ -47,26 +43,10 @@ class SelectorJuegoController: UIViewController {
             performSegue(withIdentifier: "goToTocameScreen", sender: self)
         }
     }
-    @objc func textFieldsChanged() {
-        validateButton()
-    }
-    
-    func validateButton() {
-        let jugador1 = usuario1TextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        let jugador2 = usuario2TextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        
-        // Obtener el juego seleccionado actual
-        let selectedRow = gamePicker.tag // Necesitas guardar esto en tu pickerView
-        let selectedGame = games.indices.contains(selectedRow) ? games[selectedRow] : ""
-        
-        if selectedGame == "Tocame" {
-            jugarBoton.isEnabled = !jugador1.isEmpty
-        } else {
-            jugarBoton.isEnabled = !jugador1.isEmpty && !jugador2.isEmpty
-        }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let 
     }
 }
-      
     
 
 extension SelectorJuegoController: UIPickerViewDelegate, UIPickerViewDataSource {
@@ -84,33 +64,20 @@ extension SelectorJuegoController: UIPickerViewDelegate, UIPickerViewDataSource 
         gamePicker.text = games[row]
         gamePicker.resignFirstResponder()
         //self.view.endEditing(true)
-
-        if games[row] == "Tocame" {
-            labelUser2.isHidden = true
-            usuario2TextField.isHidden = true
-        } else {
-            labelUser2.isHidden = false
-            usuario2TextField.isHidden = false
-        }
-
-       
-
-            // Para animar el cambio de layout:
-            UIView.animate(withDuration: 1) {
-                self.view.layoutIfNeeded()
-            }
+        
     }
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToPokerScreen" {
-            if let destination = segue.destination as? PokerController {
-                destination.nombreUsuario1 = usuario1TextField.text
-                destination.nombreUsuario2 = usuario2TextField.text
-            }
-        } else if segue.identifier == "goToTocameScreen" {
-            if let destination = segue.destination as? TocameController {
-                destination.nombreUsuario1 = usuario1TextField.text
-            }
-        }
-    }
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "goToPokerScreen" {
+//            if let destination = segue.destination as? PokerController {
+//                destination.nombreUsuario1 = usuario1TextField.text
+//                destination.nombreUsuario2 = usuario2TextField.text
+//            }
+//        } else if segue.identifier == "goToTocameScreen" {
+//            if let destination = segue.destination as? TocameController {
+//                destination.nombreUsuario1 = usuario1TextField.text
+//            }
+//        }
+//    }
 
 }

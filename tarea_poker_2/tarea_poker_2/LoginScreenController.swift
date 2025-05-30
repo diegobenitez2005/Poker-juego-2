@@ -9,6 +9,7 @@ import UIKit
 
 class LoginScreenController: UIViewController {
     
+    let buttonTabla = UIButton(type: .system)
     let buttonLogin = UIButton()
     let userTextField = UITextField()
     let passwordTextField = UITextField()
@@ -68,6 +69,8 @@ class LoginScreenController: UIViewController {
         buttonLogin.backgroundColor = .systemBlue
         buttonLogin.layer.cornerRadius = 50/2
         
+        buttonTabla.setTitle("Top 10", for: .normal)
+        
         
         let buttonRegistro = UIButton(type: .system)
 
@@ -80,8 +83,18 @@ class LoginScreenController: UIViewController {
         let textoSubrayado = NSAttributedString(string: titulo, attributes: atributos)
 
         buttonRegistro.setAttributedTitle(textoSubrayado, for: .normal)
+        
         buttonRegistro.addTarget(self, action: #selector(irARegistro), for: .touchUpInside)
+        
+        let tituloDelTop = "No tengo una cuenta"
+        let atributosTop: [NSAttributedString.Key: Any] = [
+            .underlineStyle: NSUnderlineStyle.single.rawValue,
+            .foregroundColor: UIColor.systemBlue
+        ]
 
+        let textoSubrayadoTop = NSAttributedString(string: tituloDelTop, attributes: atributosTop)
+
+        
         view.addSubview(stackPrincipal)
         view.addSubview(buttonLogin)
         view.addSubview(buttonRegistro)
@@ -150,5 +163,14 @@ class LoginScreenController: UIViewController {
 
         buttonLogin.isEnabled = !(usuarioVacio || contrasenaVacia)
         buttonLogin.alpha = buttonLogin.isEnabled ? 1.0 : 0.5
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "homeVC" {
+            if let destino = segue.destination as? SelectorJuegoController {
+                destino.username = userTextField.text
+                
+            }
+        }
+        
     }
 }
