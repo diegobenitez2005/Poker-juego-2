@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2A991C0D2DEDEAD700D2290C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 2A991C0C2DEDEAD700D2290C /* Alamofire */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		2A1D4D6E2DE0C0EC003A8614 /* tarea_poker_2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tarea_poker_2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A991C0D2DEDEAD700D2290C /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = tarea_poker_2;
 			packageProductDependencies = (
+				2A991C0C2DEDEAD700D2290C /* Alamofire */,
 			);
 			productName = tarea_poker_2;
 			productReference = 2A1D4D6E2DE0C0EC003A8614 /* tarea_poker_2.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = 2A1D4D652DE0C0EC003A8614;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				2A991C0B2DEDEAD700D2290C /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2A1D4D6F2DE0C0EC003A8614 /* Products */;
 			projectDirPath = "";
@@ -333,6 +342,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2A991C0B2DEDEAD700D2290C /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2A991C0C2DEDEAD700D2290C /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2A991C0B2DEDEAD700D2290C /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2A1D4D662DE0C0EC003A8614 /* Project object */;
 }

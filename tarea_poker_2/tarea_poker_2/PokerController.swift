@@ -36,13 +36,12 @@ class PokerController: UIViewController {
     @IBOutlet weak var puntajeJugador2: UILabel!
     @IBOutlet weak var jugarButton: UIButton!
     
-    @IBOutlet weak var labelBienvenidos: UILabel!
     
     var vistasCartasJugador1: [UIImageView] = []
     var vistasCartasJugador2: [UIImageView] = []
     
     var nombreUsuario1: String?
-    var nombreUsuario2: String?
+   
     
     @IBOutlet weak var nameJugador1: UILabel!
     @IBOutlet weak var nameJugador2: UILabel!
@@ -50,7 +49,6 @@ class PokerController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         nameJugador1.text = nombreUsuario1
-        nameJugador2.text = nombreUsuario2
         nameJugador1.textColor = .white
         nameJugador2.textColor = .white
         // Inicializamos los arrays aquí (ya conectados los IBOutlet)

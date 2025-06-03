@@ -10,23 +10,54 @@ var resultados: [[String: Any]] = []
 
 class ResultadosViewController: UIViewController {
     @IBOutlet weak var tablaResultados: UITableView!
-    
+    var usuarioActual: String?
+    var mostrarGlobal: Bool = false
+
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let datos = UserDefaults.standard.array(forKey: "resultados") as? [[String: Any]] {
-            resultados = datos
-        }
         tablaResultados.dataSource = self
-        resultados.sort {
-            let puntaje1 = $0["puntaje"] as? Int ?? 0
-            let puntaje2 = $1["puntaje"] as? Int ?? 0
-            return puntaje1 > puntaje2
+        resultados = []
+
+        let usuarios = UserDefaults.standard.dictionary(forKey: "usuarios") as? [String: [String: Any]] ?? [:]
+
+        if mostrarGlobal {
+            for (nombre, datos) in usuarios {
+                if let puntajes = datos["puntajes"] as? [String: [Int]],
+                   let puntajesTocame = puntajes["tocame"],
+                   let maxPuntaje = puntajesTocame.max() {
+                    resultados.append(["nombre": nombre, "puntaje": maxPuntaje])
+                }
+            }
+            resultados.sort {
+                let p1 = $0["puntaje"] as? Int ?? 0
+                let p2 = $1["puntaje"] as? Int ?? 0
+                return p1 > p2
+            }
+            resultados = Array(resultados.prefix(10))
+        } else if let usuario = usuarioActual,
+                  let datos = usuarios[usuario],
+                  let puntajes = datos["puntajes"] as? [String: [Int]],
+                  let puntajesTocame = puntajes["tocame"] {
+           
+            for p in puntajesTocame {
+                resultados.append(["nombre": usuario, "puntaje": p])
+            }
+            resultados.sort {
+                let p1 = $0["puntaje"] as? Int ?? 0
+                let p2 = $1["puntaje"] as? Int ?? 0
+                return p1 > p2
+            }
+            resultados = Array(resultados.prefix(5))
         }
+
+        tablaResultados.reloadData()
     }
-}
+
+    }
+
 extension ResultadosViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return resultados.count > 5 ? 5 : resultados.count

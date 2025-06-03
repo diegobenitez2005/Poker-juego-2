@@ -4,22 +4,24 @@
 //
 //  Created by bootcamp on 2025-05-28.
 //
-
+import Alamofire
 import UIKit
 
 class LoginScreenController: UIViewController {
     
     let buttonTabla = UIButton(type: .system)
     let buttonLogin = UIButton()
-    let userTextField = UITextField()
+    let emailTextField = UITextField()
     let passwordTextField = UITextField()
-
+    let buttonTop = UIButton()
     override func viewDidLoad() {
         super.viewDidLoad()
         builder()
         buttonLogin.addTarget(self, action: #selector(validarLogin), for: .touchUpInside)
-        userTextField.addTarget(self, action: #selector(verificarCampos), for: .editingChanged)
+        emailTextField.addTarget(self, action: #selector(verificarCampos), for: .editingChanged)
         passwordTextField.addTarget(self, action: #selector(verificarCampos), for: .editingChanged)
+        buttonTop.addTarget(self, action: #selector(irAtop10), for: .touchUpInside)
+
         if let usuarios = UserDefaults.standard.dictionary(forKey: "usuarios") {
             print("Usuarios guardados:", usuarios)
         } else {
@@ -28,9 +30,9 @@ class LoginScreenController: UIViewController {
 
     }
     func builder() {
-        let userLabel = UILabel()
-        userLabel.text = "Usuario"
-        userLabel.font = UIFont.systemFont(ofSize: 16)
+        let emailLabel = UILabel()
+        emailLabel.text = "Correo electronico"
+        emailLabel.font = UIFont.systemFont(ofSize: 16)
         
         let passwordLabel = UILabel()
         passwordLabel.text = "Contraseña"
@@ -40,10 +42,11 @@ class LoginScreenController: UIViewController {
         let textFieldAltura:CGFloat = 50
         
         //let userTextField = UITextField()
-        userTextField.placeholder = "Ingrese su usuario"
-        userTextField.borderStyle = .roundedRect
-        userTextField.widthAnchor.constraint(equalToConstant: textFieldAncho).isActive = true
-        userTextField.heightAnchor.constraint(equalToConstant: textFieldAltura).isActive = true
+        emailTextField.placeholder = "Ingrese su usuario"
+        emailTextField.borderStyle = .roundedRect
+        emailTextField.widthAnchor.constraint(equalToConstant: textFieldAncho).isActive = true
+        emailTextField.heightAnchor.constraint(equalToConstant: textFieldAltura).isActive = true
+        emailTextField.autocapitalizationType = .none
         
         //let passwordTextField = UITextField()
         passwordTextField.placeholder = "Ingrese su contraseña"
@@ -52,8 +55,9 @@ class LoginScreenController: UIViewController {
         passwordTextField.heightAnchor.constraint(equalToConstant: textFieldAltura).isActive = true
         passwordTextField.textContentType = .password
         passwordTextField.isSecureTextEntry = true
+        passwordTextField.autocapitalizationType = .none
         
-        let stackUser = UIStackView(arrangedSubviews: [userLabel, userTextField])
+        let stackUser = UIStackView(arrangedSubviews: [emailLabel, emailTextField])
         stackUser.axis = .vertical
         stackUser.spacing = 5
         
@@ -69,7 +73,6 @@ class LoginScreenController: UIViewController {
         buttonLogin.backgroundColor = .systemBlue
         buttonLogin.layer.cornerRadius = 50/2
         
-        buttonTabla.setTitle("Top 10", for: .normal)
         
         
         let buttonRegistro = UIButton(type: .system)
@@ -92,12 +95,17 @@ class LoginScreenController: UIViewController {
             .foregroundColor: UIColor.systemBlue
         ]
 
-        let textoSubrayadoTop = NSAttributedString(string: tituloDelTop, attributes: atributosTop)
-
+        _ = NSAttributedString(string: tituloDelTop, attributes: atributosTop)
+        
+       
+        buttonTop.setTitle("Top 10", for: .normal)
+        buttonTop.layer.cornerRadius = 50/2
+        buttonTop.backgroundColor = .systemGray
         
         view.addSubview(stackPrincipal)
         view.addSubview(buttonLogin)
         view.addSubview(buttonRegistro)
+        view.addSubview(buttonTop)
         
         NSLayoutConstraint.activate([
             stackPrincipal.centerXAnchor.constraint(equalTo:view.centerXAnchor),
@@ -113,42 +121,56 @@ class LoginScreenController: UIViewController {
             buttonRegistro.topAnchor.constraint(equalTo: buttonLogin.bottomAnchor, constant: 30),
             buttonRegistro.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             buttonRegistro.widthAnchor.constraint(equalToConstant: 200),
-            buttonRegistro.heightAnchor.constraint(equalToConstant: 50)
+            buttonRegistro.heightAnchor.constraint(equalToConstant: 50),
+            
+            buttonTop.topAnchor.constraint(equalTo: buttonRegistro.bottomAnchor, constant: 30),
+            buttonTop.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            buttonTop.widthAnchor.constraint(equalToConstant: 200),
+            buttonTop.heightAnchor.constraint(equalToConstant: 50)
         ]
         )
         stackPrincipal.translatesAutoresizingMaskIntoConstraints = false
         buttonLogin.translatesAutoresizingMaskIntoConstraints = false
         buttonRegistro.translatesAutoresizingMaskIntoConstraints = false
+        buttonTop.translatesAutoresizingMaskIntoConstraints = false
     }
     
     @objc func irARegistro() {
         performSegue(withIdentifier: "registroVC", sender: self)
     }
+    @objc func irAtop10() {
+        let vc = storyboard?.instantiateViewController(withIdentifier: "resultadosVC") as! ResultadosViewController
+        navigationController?.pushViewController(vc, animated: true)
+        vc.mostrarGlobal = true
+
+    }
     
     @objc func validarLogin() {
-        guard let usuarioIngresado = userTextField.text,
+        guard let emailUsuario = emailTextField.text,
               let contrasenaIngresada = passwordTextField.text else {
             return
         }
 
-        if let usuariosRegistrados = UserDefaults.standard.dictionary(forKey: "usuarios") as? [String: [String: Any]] {
+//        if let usuariosRegistrados = UserDefaults.standard.dictionary(forKey: "usuarios") as? [String: [String: Any]] {
             
-            if let datosUsuario = usuariosRegistrados[usuarioIngresado],
-               let contrasenaGuardada = datosUsuario["contrasena"] as? String {
-                
-                if contrasenaGuardada == contrasenaIngresada {
-                    //  Login exitoso
-                    performSegue(withIdentifier: "homeVC", sender: self)
-                } else {
-                    mostrarAlerta(mensaje: "La contraseña es incorrecta.")
-                }
-            } else {
-                mostrarAlerta(mensaje: "El usuario no está registrado.")
-            }
-            
-        } else {
-            mostrarAlerta(mensaje: "No hay usuarios registrados.")
-        }
+//            if let datosUsuario = usuariosRegistrados[emailUsuario],
+//               let contrasenaGuardada = datosUsuario["contrasena"] as? String {
+//                
+//                if contrasenaGuardada == contrasenaIngresada {
+//                    //  Login exitoso
+//                    performSegue(withIdentifier: "homeVC", sender: self)
+//                } else {
+//                    mostrarAlerta(mensaje: "La contraseña es incorrecta.")
+//                }
+//            } else {
+//                mostrarAlerta(mensaje: "El usuario no está registrado.")
+//            }
+//            
+//        } else {
+//            mostrarAlerta(mensaje: "No hay usuarios registrados.")
+//        }
+        AuthLogin.iniciarSesion(emailUsuario,contrasenaIngresada)
+        performSegue(withIdentifier: "homeVC", sender: self)
     }
     
     func mostrarAlerta(titulo: String = "Error", mensaje: String) {
@@ -158,7 +180,7 @@ class LoginScreenController: UIViewController {
     }
     
     @objc func verificarCampos() {
-        let usuarioVacio = userTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true
+        let usuarioVacio = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true
         let contrasenaVacia = passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true
 
         buttonLogin.isEnabled = !(usuarioVacio || contrasenaVacia)
@@ -167,7 +189,7 @@ class LoginScreenController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "homeVC" {
             if let destino = segue.destination as? SelectorJuegoController {
-                destino.username = userTextField.text
+                destino.username = emailTextField.text
                 
             }
         }
