@@ -48,8 +48,7 @@ class PokerController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        nameJugador1.text = nombreUsuario1
-        nameJugador1.textColor = .white
+        
         nameJugador2.textColor = .white
         // Inicializamos los arrays aquí (ya conectados los IBOutlet)
         vistasCartasJugador1 = [

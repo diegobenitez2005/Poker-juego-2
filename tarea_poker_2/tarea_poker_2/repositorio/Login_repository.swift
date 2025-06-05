@@ -8,31 +8,29 @@ import Foundation
 import Alamofire
 
 class AuthLogin {
-    static func iniciarSesion(_ email: String, _ password:String) {
+    static func iniciarSesion(_ email: String, _ password: String, completion: @escaping (_ exito: Bool, _ mensaje: String, _ statusCode: Int?) -> Void) {
         let nuevaSesion = LoginModel(email: email, password: password)
         
         AF.request("https://lvmybcyhrbisfjouhbrx.supabase.co/auth/v1/token?grant_type=password",
                    method: .post,
                    parameters: nuevaSesion,
                    encoder: JSONParameterEncoder.json,
-                   headers: Constantes.headersValidaciones)
-        .validate().response {
-            response in
+                   headers: Constantes.headerSencillo)
+        .validate().response { response in
+            let statusCode = response.response?.statusCode
             switch response.result {
             case .success(let data):
-                print("Login exitoso.")
-                if let data = data {
-                    print(String(data: data, encoding: .utf8) ?? "No se pudo mostrar la respuesta")
-                    if let loginResponse = decodeLoginResponse(from: data) {
-                        SesionUsuario.shared.accessToken = loginResponse.access_token
-                        SesionUsuario.shared.userId = loginResponse.user.id
-                        
-                        print("Access Token: \(loginResponse.access_token)")
-                        print("User ID: \(loginResponse.user.id)")
-                    }
+                if let data = data, let loginResponse = decodeLoginResponse(from: data) {
+                    SesionUsuario.shared.accessToken = loginResponse.access_token
+                    SesionUsuario.shared.userId = loginResponse.user.id
+                    completion(true, "Login exitoso", statusCode)
+                } else {
+                    completion(false, "Error al decodificar", statusCode)
                 }
+
             case .failure(let error):
-                print("Error en el login: \(error)")
+                print("Error: \(error)")
+                completion(false, "Fallo la solicitud", statusCode)
             }
         }
     }
@@ -46,3 +44,4 @@ func decodeLoginResponse(from data: Data) -> LoginResponse? {
         return nil
     }
 }
+

@@ -30,7 +30,7 @@ class TocameController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         targetButton.isHidden = true
-        nombreLabel.text = nombreUsuario1
+//        nombreLabel.text = nombreUsuario1
     }
     
     @IBAction func buttonTapped(_ sender: UIButton) {
@@ -81,35 +81,26 @@ class TocameController: UIViewController {
         targetButton.isHidden = true
         tiempoInicial = 30
         jugando = false
-        guard let nombreUsuario = nombreUsuario1 else { return }
-
-        
-        // 1. Recuperar el diccionario de usuarios
-            var usuarios = UserDefaults.standard.dictionary(forKey: "usuarios") as? [String: [String: Any]] ?? [:]
-
-            // 2. Verificar si el usuario existe
-            if var datosUsuario = usuarios[nombreUsuario] {
-                // 3. Recuperar (o crear) el diccionario de puntajes
-                var puntajes = datosUsuario["puntajes"] as? [String: [Int]] ?? [:]
-
-                // 4. Agregar el nuevo puntaje a la lista de "tocame"
-                var puntajesTocame = puntajes["tocame"] ?? []
-                puntajesTocame.append(puntaje)
-                puntajes["tocame"] = puntajesTocame
-
-                // 5. Actualizar los datos del usuario y guardar en UserDefaults
-                datosUsuario["puntajes"] = puntajes
-                usuarios[nombreUsuario] = datosUsuario
-                UserDefaults.standard.set(usuarios, forKey: "usuarios")
-            }
-
-//        var resultados = UserDefaults.standard.array(forKey: "resultados") as? [[String: Any]] ?? []
-//        resultados.append(["nombre": nombre ?? "Jugador Desconocido", "puntaje": puntaje])
-//        UserDefaults.standard.set(resultados, forKey: "resultados")
+//        guard let nombreUsuario = nombreUsuario1 else { return }
+        if let userId = SesionUsuario.shared.userId {
+            let fechaActual = Date()
+            let fechaFormateada = fechaActual.formatearFecha()
+            PostScoreRepo.SendUserScore(userId ,"1",puntaje,fechaFormateada)
+        } else {
+            let alerta = UIAlertController(
+                    title: "Error",
+                    message: "Error al mandar los puntajes: no se encontró el access token.",
+                    preferredStyle: .alert
+            )
+            alerta.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alerta, animated: true, completion: nil)
+        }
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? ResultadosViewController  {
             destination.usuarioActual = nombreUsuario1
             destination.mostrarGlobal = false
-        }    }
+        }
+    }
 }

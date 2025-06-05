@@ -1,25 +1,26 @@
 //
-//  Registro_repository.swift
+//  PostScore_repository.swift
 //  tarea_poker_2
 //
-//  Created by bootcamp on 2025-06-03.
+//  Created by bootcamp on 2025-06-04.
 //
-import Foundation
+
 import Alamofire
-class AuthApi {
-    
-    static func registrarUsuario(_ email: String, _ pass: String) {
-        let nuevoRegistro = RegistroModel(email: email, password: pass)
+
+
+actor PostScoreRepo {
+    static func SendUserScore(_ userId: String, _ gameId: String, _ score: Int, _ date: String ) {
+        let nuevoPuntaje = PostUserScoreModel (user_id: userId, game_id: gameId, score: score, date: date)
         
         AF.request(
-            "https://lvmybcyhrbisfjouhbrx.supabase.co/auth/v1/signup",
+            "https://lvmybcyhrbisfjouhbrx.supabase.co/rest/v1/scores",
             method: .post,
-            parameters: nuevoRegistro,
+            parameters: nuevoPuntaje,
             encoder: JSONParameterEncoder.json,
-            headers: Constantes.headerSencillo
+            headers: Constantes.headersUserPost
         )
-        .response
-         { response in
+        .validate().response
+        { response in
             switch response.result {
             case .success(let data):
                 print("Registro exitoso.")

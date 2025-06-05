@@ -150,34 +150,29 @@ class LoginScreenController: UIViewController {
               let contrasenaIngresada = passwordTextField.text else {
             return
         }
-
-//        if let usuariosRegistrados = UserDefaults.standard.dictionary(forKey: "usuarios") as? [String: [String: Any]] {
+        
+        AuthLogin.iniciarSesion(emailUsuario, contrasenaIngresada) { exito, mensaje, statusCode in
+            print("Mensaje: \(mensaje)")
+            print("Status code: \(statusCode ?? -1)")
             
-//            if let datosUsuario = usuariosRegistrados[emailUsuario],
-//               let contrasenaGuardada = datosUsuario["contrasena"] as? String {
-//                
-//                if contrasenaGuardada == contrasenaIngresada {
-//                    //  Login exitoso
-//                    performSegue(withIdentifier: "homeVC", sender: self)
-//                } else {
-//                    mostrarAlerta(mensaje: "La contraseña es incorrecta.")
-//                }
-//            } else {
-//                mostrarAlerta(mensaje: "El usuario no está registrado.")
-//            }
-//            
-//        } else {
-//            mostrarAlerta(mensaje: "No hay usuarios registrados.")
-//        }
-        AuthLogin.iniciarSesion(emailUsuario,contrasenaIngresada)
-        performSegue(withIdentifier: "homeVC", sender: self)
+            if exito {
+                self.performSegue(withIdentifier: "homeVC", sender: self)
+            } else {
+                let alerta = UIAlertController(title: "Error", message: "Código: \(statusCode ?? -1)\n\(mensaje)", preferredStyle: .alert)
+                alerta.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(alerta, animated: true)
+            }
+        }
+        
     }
     
-    func mostrarAlerta(titulo: String = "Error", mensaje: String) {
-        let alerta = UIAlertController(title: titulo, message: mensaje, preferredStyle: .alert)
-        alerta.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alerta, animated: true)
-    }
+
+    
+//    func mostrarAlerta(titulo: String = "Error", mensaje: String) {
+//        let alerta = UIAlertController(title: titulo, message: mensaje, preferredStyle: .alert)
+//        alerta.addAction(UIAlertAction(title: "OK", style: .default))
+//        present(alerta, animated: true)
+//    }
     
     @objc func verificarCampos() {
         let usuarioVacio = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true
@@ -188,8 +183,8 @@ class LoginScreenController: UIViewController {
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "homeVC" {
-            if let destino = segue.destination as? SelectorJuegoController {
-                destino.username = emailTextField.text
+            if let destino = segue.destination as? ResultadosViewController {
+                destino.mostrarGlobal = true
                 
             }
         }
