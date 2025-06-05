@@ -8,8 +8,9 @@ import Foundation
 import Alamofire
 class AuthApi {
     
-    static func registrarUsuario(_ email: String, _ pass: String) {
-        let nuevoRegistro = RegistroModel(email: email, password: pass)
+    static func registrarUsuario(_ email: String, _ pass: String, _ nombre: String?) {
+        let nuevoRegistro = RegistroModel(email: email, password: pass,user_metadata: UserMetadata(nombre: nombre)
+)
         
         AF.request(
             "https://lvmybcyhrbisfjouhbrx.supabase.co/auth/v1/signup",

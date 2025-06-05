@@ -66,12 +66,12 @@ extension ResultadosViewController: UITableViewDataSource {
         if mostrarGlobal {
             let resultado = scoreGlobal[indexPath.row]
             let fechaFormateada = formatearFecha(resultado.date)
-            cell.textLabel?.text = "#\(indexPath.row + 1) - Puntaje: \(resultado.score) - \(fechaFormateada)"
+            cell.textLabel?.text = "#\(indexPath.row + 1) \(SesionUsuario.shared.nombre ?? "Jugador")  \(resultado.score) - \(fechaFormateada)"
         } else {
             let resultado = scores[indexPath.row]
             let fechaFormateada = formatearFecha(resultado.date)
-            cell.textLabel?.text = "Puntaje: \(resultado.score) - \(fechaFormateada)"
-            cell.detailTextLabel?.text = "Juego ID: \(resultado.game_id)"
+            cell.textLabel?.text = "\(SesionUsuario.shared.nombre ?? "Jugador"): \(resultado.score) - \(fechaFormateada)"
+//            cell.detailTextLabel?.text = ""
         }
         
         return cell

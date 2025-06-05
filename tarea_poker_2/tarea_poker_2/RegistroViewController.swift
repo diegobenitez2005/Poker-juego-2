@@ -15,6 +15,8 @@ class RegistroViewController: UIViewController {
         
     @IBOutlet weak var contrasenhaTextField: UITextField!
     
+    @IBOutlet weak var nombreTextField: UITextField!
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -53,8 +55,9 @@ class RegistroViewController: UIViewController {
 //        UserDefaults.standard.set(usuarios, forKey: "usuarios")
         let email = emailTextField.text ?? "VALOR QUE TIRA ERROR"
         let contrasenha = contrasenhaTextField.text ?? "1234"
+        let nombre = nombreTextField.text ?? "Jugador"
         
-        AuthApi.registrarUsuario(email,contrasenha)
+        AuthApi.registrarUsuario(email,contrasenha,nombre)
         
         
         

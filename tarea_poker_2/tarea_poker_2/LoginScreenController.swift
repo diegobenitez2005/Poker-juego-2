@@ -151,7 +151,7 @@ class LoginScreenController: UIViewController {
             return
         }
         
-        AuthLogin.iniciarSesion(emailUsuario, contrasenaIngresada) { exito, mensaje, statusCode in
+        AuthLogin.iniciarSesion(emailUsuario, contrasenaIngresada) { exito, mensaje, statusCode,nombre  in
             print("Mensaje: \(mensaje)")
             print("Status code: \(statusCode ?? -1)")
             

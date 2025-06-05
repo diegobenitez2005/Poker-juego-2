@@ -8,7 +8,7 @@ import Foundation
 import Alamofire
 
 class AuthLogin {
-    static func iniciarSesion(_ email: String, _ password: String, completion: @escaping (_ exito: Bool, _ mensaje: String, _ statusCode: Int?) -> Void) {
+    static func iniciarSesion(_ email: String, _ password: String, completion: @escaping (_ exito: Bool, _ mensaje: String, _ statusCode: Int?, _ nombre: String?) -> Void) {
         let nuevaSesion = LoginModel(email: email, password: password)
         
         AF.request("https://lvmybcyhrbisfjouhbrx.supabase.co/auth/v1/token?grant_type=password",
@@ -23,14 +23,16 @@ class AuthLogin {
                 if let data = data, let loginResponse = decodeLoginResponse(from: data) {
                     SesionUsuario.shared.accessToken = loginResponse.access_token
                     SesionUsuario.shared.userId = loginResponse.user.id
-                    completion(true, "Login exitoso", statusCode)
+                    SesionUsuario.shared.nombre = loginResponse.user.user_metadata?.nombre
+                    completion(true, "Login exitoso", statusCode, loginResponse.user.user_metadata?.nombre)
+
                 } else {
-                    completion(false, "Error al decodificar", statusCode)
+                    completion(false, "Error al decodificar", statusCode,"hola")
                 }
 
             case .failure(let error):
                 print("Error: \(error)")
-                completion(false, "Fallo la solicitud", statusCode)
+                completion(false, "Fallo la solicitud", statusCode,"hola")
             }
         }
     }

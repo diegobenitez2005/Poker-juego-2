@@ -13,7 +13,7 @@ class SesionUsuario {
     
      var accessToken: String!
      var userId: String!
-     
+     var nombre: String!
     func limpiarCampos() {
          accessToken = nil
          userId = nil

@@ -9,6 +9,7 @@ import Foundation
 struct LoginModel: Codable {
     let email:String
     let password: String
+//    let user_metadata: UserMetadataLogin?
         
 }
 
@@ -19,5 +20,9 @@ struct LoginResponse: Decodable {
 
 struct User: Decodable {
     let id: String
+    let user_metadata: UserMetadataLogin?
 }
 
+struct UserMetadataLogin: Codable {
+    let nombre: String?
+}

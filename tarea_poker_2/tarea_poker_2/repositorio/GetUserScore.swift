@@ -14,8 +14,8 @@ class UserScoreRepo {
     
     // Método para obtener scores de un usuario específico
     static func obtenerScoresPorUsuario(userId: String, completion: @escaping ([UserScoreResponse]) -> Void) {
-        // URL con filtro por user_id usando query parameters de Supabase
-        let url = "https://lvmybcyhrbisfjouhbrx.supabase.co/rest/v1/scores?user_id=eq.f5d38f70-01f6-4c50-89fa-31dbc63493b3"
+        let userId = SesionUsuario.shared.userId
+        let url = "https://lvmybcyhrbisfjouhbrx.supabase.co/rest/v1/scores?user_id=eq.\(userId ?? "hola")"
         
         AF.request(url,
                    method: .get,
